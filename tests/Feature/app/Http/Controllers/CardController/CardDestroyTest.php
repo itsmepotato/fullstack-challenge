@@ -6,6 +6,7 @@ use App\Card;
 use App\Stage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Response;
 use Tests\TestCase;
 
 class CardDestroyTest extends TestCase
@@ -26,7 +27,7 @@ class CardDestroyTest extends TestCase
         $card = factory(Card::class)->create();
 
         $response = $this->deleteJson('/api/cards/'. $card->id);
-        $response->assertStatus(204);
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
 
         $this->assertDatabaseMissing('cards',[
             'id' => $card->id

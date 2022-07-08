@@ -6,6 +6,7 @@ use App\Card;
 use App\Stage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Response;
 use Tests\TestCase;
 
 class CardStoreTest extends TestCase
@@ -31,7 +32,7 @@ class CardStoreTest extends TestCase
 
         $response = $this->postJson('/api/cards', $fields);
 
-        $response->assertStatus(201)
+        $response->assertStatus(Response::HTTP_CREATED)
                  ->assertJson([
                      'name' => $fields['name'],
                  ]);
@@ -50,7 +51,8 @@ class CardStoreTest extends TestCase
         ];
 
         $response = $this->postJson('/api/cards', $fields);
-        $response->assertJsonValidationErrors(['name']);
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+                ->assertJsonValidationErrors(['name']);
     }
 
     public function test_delivery_date_is_required()
@@ -62,7 +64,8 @@ class CardStoreTest extends TestCase
         ];
 
         $response = $this->postJson('/api/cards', $fields);
-        $response->assertJsonValidationErrors(['delivery_date']);
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+                ->assertJsonValidationErrors(['delivery_date']);
     }
 
     public function test_delivery_date_must_be_a_date()
@@ -74,7 +77,8 @@ class CardStoreTest extends TestCase
         ];
 
         $response = $this->postJson('/api/cards', $fields);
-        $response->assertJsonValidationErrors(['delivery_date']);
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+                ->assertJsonValidationErrors(['delivery_date']);
     }
 
     public function test_stage_id_is_required()
@@ -86,7 +90,8 @@ class CardStoreTest extends TestCase
         ];
 
         $response = $this->postJson('/api/cards', $fields);
-        $response->assertJsonValidationErrors(['stage_id']);
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+                ->assertJsonValidationErrors(['stage_id']);
     }
 
     public function test_stage_must_exists()
@@ -98,6 +103,26 @@ class CardStoreTest extends TestCase
         ];
 
         $response = $this->postJson('/api/cards', $fields);
-        $response->assertJsonValidationErrors(['stage_id']);
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+                ->assertJsonValidationErrors(['stage_id']);
+    }
+
+    public function test_the_card_has_to_be_unique_on_store()
+    {
+        $cardName = 'tarea random';
+
+        factory(Card::class)->create([
+            'name' => $cardName
+        ]);
+
+        $fields = [
+            'name' => $cardName,
+            'stage_id' => Stage::BUFFER,
+            'delivery_date' => '2022-07-05'
+        ];
+
+        $response = $this->postJson('/api/cards', $fields);
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+                ->assertJsonValidationErrors(['name']);
     }
 }

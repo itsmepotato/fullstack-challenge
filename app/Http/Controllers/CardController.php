@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Card;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class CardController extends Controller
 {
@@ -29,7 +30,7 @@ class CardController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|unique:cards,name',
             'delivery_date' => 'required|date',
             'stage_id' => 'required|exists:App\Stage,id'
         ]);
@@ -64,9 +65,14 @@ class CardController extends Controller
      */
     public function update(Request $request, Card $card)
     {
-        // $request->validate([
-
-        // ]);
+        $request->validate([
+            'name' => [
+                'required',
+                Rule::unique('cards')->ignore($card->id),
+            ],
+            'delivery_date' => 'required|date',
+            'stage_id' => 'required|exists:App\Stage,id'
+        ]);
 
         $card->update([
             'name' => $request['name'],

@@ -7,6 +7,7 @@ use App\Stage;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Response;
 use Tests\TestCase;
 
 class CardIndexTest extends TestCase
@@ -29,7 +30,7 @@ class CardIndexTest extends TestCase
         $cardsCount = Card::count();
 
         $response = $this->getJson('/api/cards');
-        $response->assertStatus(200)
+        $response->assertStatus(Response::HTTP_OK)
                 ->assertJsonCount($cardsCount);
     }
 
@@ -49,7 +50,7 @@ class CardIndexTest extends TestCase
         ]);
 
         $response = $this->getJson('/api/cards');
-        $response->assertStatus(200)
+        $response->assertStatus(Response::HTTP_OK)
                 ->assertJsonCount($cardsCountOfCurrentUser);
     }
 }
