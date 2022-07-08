@@ -14,7 +14,10 @@ class CardController extends Controller
      */
     public function index()
     {
-        //
+        $cards = Card::where('user_id', auth()->id())
+                    ->get();
+
+        return response()->json($cards);
     }
 
     /**

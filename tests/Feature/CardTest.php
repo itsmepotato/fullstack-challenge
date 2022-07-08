@@ -19,6 +19,19 @@ class CardTest extends TestCase
         $this->seed('StageSeeder');
     }
 
+    public function test_it_shows_a_list_of_cards()
+    {
+        $this->withoutExceptionHandling();
+
+        factory(Card::class,2)->create();
+
+        $cardsCount = Card::count();
+
+        $response = $this->getJson('/api/cards');
+        $response->assertStatus(200)
+                ->assertJsonCount($cardsCount);
+    }
+
     public function test_it_can_store_a_card()
     {
         $this->withoutExceptionHandling();
