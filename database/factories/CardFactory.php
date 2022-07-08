@@ -11,7 +11,9 @@ $factory->define(Card::class, function (Faker $faker) {
     $user = User::first() ?? factory(User::class)->create();
     $stage = Stage::first() ?? factory(Stage::class)->create();
     return [
+        'name' => $faker->word,
         'user_id' => $user->id,
-        'stage_id' => $stage->id
+        'stage_id' => $stage->id,
+        'delivery_date' => $faker->date()
     ];
 });

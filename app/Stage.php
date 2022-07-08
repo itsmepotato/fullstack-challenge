@@ -6,6 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Stage extends Model
 {
+    protected $table = 'stages';
+    public $incrementing = false;
+    protected $primaryKey = 'id';
+    protected $keyType = 'string';
+
+    public const BUFFER = "BUFFER";
+    public const WORKING = "WORKING";
+    public const DONE = "DONE";
+
     // relations
     public function cards()
     {

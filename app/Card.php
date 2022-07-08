@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Card extends Model
 {
+    protected $guarded = [];
+
     // relations
     public function user()
     {
