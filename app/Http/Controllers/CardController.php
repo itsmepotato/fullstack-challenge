@@ -31,7 +31,7 @@ class CardController extends Controller
         $request->validate([
             'name' => 'required',
             'delivery_date' => 'required|date',
-            'stage_id' => 'required'
+            'stage_id' => 'required|exists:App\Stage,id'
         ]);
 
         $card = Card::create([
