@@ -11,7 +11,7 @@ const store = new Vuex.Store({
 	},
 	plugins: [
 		new VuexPersistence({
-			// key: 'auth',
+			key: 'auth',
 			storage: window.localStorage
 		}).plugin
 	]
