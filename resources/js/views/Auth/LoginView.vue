@@ -21,7 +21,7 @@
 
 					<div class="flex flex-col justify-between my-1">
 						<label for="password" class="text-[#205285]">
-							Password
+							Contraseña
 						</label>
 						<input type="password" v-model="loginForm.password" class="w-full h-9 mt-2 p-4 border border-gray-300">
 						<div>
