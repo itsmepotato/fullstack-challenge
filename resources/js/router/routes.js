@@ -1,8 +1,22 @@
-import Foo from '../components/ExampleComponent.vue'
+import Dashboard from '../views/Dashboard/Dashboard.vue'
+import Login from '../views/Auth/LoginView.vue'
+
 export default [
     {
         path: '/',
-        component: Foo
+        redirect: { name: 'dashboard' }
     },
+    {
+        path: '/login',
+        name: 'login',
+        component: Login,
+        // meta: { requiresAuth: false }
+    },
+    {
+        path: "/dashboard",
+        name: "dashboard",
+        component: Dashboard
+        // meta: { requiresAuth: true }
+      },
 ];
 
