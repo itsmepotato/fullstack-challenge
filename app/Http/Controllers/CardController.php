@@ -3,6 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Card;
+use App\Http\Requests\Card\StoreRequest;
+use App\Http\Requests\Card\UpdateRequest;
+use App\Services\Card\CreateCard;
+use App\Services\Card\DeleteCard;
+use App\Services\Card\ListCards;
+use App\Services\Card\UpdateCard;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -13,11 +19,9 @@ class CardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(ListCards $listCards)
     {
-        $cards = Card::where('user_id', auth()->id())
-                    ->get();
-
+        $cards = $listCards->execute(auth()->user());
         return response()->json($cards);
     }
 
@@ -27,20 +31,10 @@ class CardController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request, CreateCard $createCard)
     {
-        $request->validate([
-            'name' => 'required|unique:cards,name',
-            'delivery_date' => 'required|date',
-            'stage_id' => 'required|exists:App\Stage,id'
-        ]);
-
-        $card = Card::create([
-            'name' => $request['name'],
-            'delivery_date' => $request['delivery_date'],
-            'stage_id' => $request['stage_id'],
-            'user_id' => auth()->id(),
-        ]);
+        $request['user_id'] = auth()->id();
+        $card = $createCard->execute($request->all());
 
         return response()->json($card, 201);
     }
@@ -63,23 +57,10 @@ class CardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Card $card)
+    public function update(UpdateRequest $request, Card $card, UpdateCard $updateCard)
     {
-        $request->validate([
-            'name' => [
-                'required',
-                Rule::unique('cards')->ignore($card->id),
-            ],
-            'delivery_date' => 'required|date',
-            'stage_id' => 'required|exists:App\Stage,id'
-        ]);
-
-        $card->update([
-            'name' => $request['name'],
-            'delivery_date' => $request['delivery_date'],
-            'stage_id' => $request['stage_id'],
-            'user_id' => auth()->id(),
-        ]);
+        $request['user_id'] = auth()->id();
+        $card = $updateCard->execute($card, $request->all());
 
         return response()->json($card, 201);
     }
@@ -90,9 +71,9 @@ class CardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Card $card)
+    public function destroy(Card $card, DeleteCard $deleteCard)
     {
-        $card->delete();
+        $deleteCard->execute($card);
         return response()->json([], 204);
     }
 }
