@@ -86,12 +86,20 @@ name: "login-view",
 	},
 
 	methods: {
-        login: function () {
-            // setTimeout(function () {})
-            this.isLoading= true
+        async login() {
+            this.isLoading = true
+            this.errors = null;
 
-            console.log(this.loginForm);
-            setTimeout(() => this.isLoading = false, 1000)
+			await this.$store.dispatch('login', this.loginForm)
+            .catch(err => {
+				this.isLoading = false;
+				this.loginForm.password = '';
+				this.errors = err.response.data.errors;
+			});
+
+			if(this.errors === null) {
+				this.$router.push({ name: 'dashboard' });
+			}
 
         }
 	},
