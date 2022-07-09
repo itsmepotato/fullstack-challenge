@@ -19,6 +19,7 @@ class StageSeeder extends Seeder
             ],
             [
                 'name' => 'Buffer',
+                'order' => 1,
                 'description' => null,
             ]);
 
@@ -28,6 +29,7 @@ class StageSeeder extends Seeder
             ],
             [
                 'name' => 'Working',
+                'order' => 2,
                 'description' => null,
             ]);
 
@@ -37,6 +39,7 @@ class StageSeeder extends Seeder
             ],
             [
                 'name' => 'Done',
+                'order' => 3,
                 'description' => null,
             ]);
 

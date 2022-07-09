@@ -18,6 +18,7 @@ class CreateStagesTable extends Migration
             $table->string('id', 50)->primary();
 
             $table->string('name', 50);
+            $table->integer('order');
             $table->string('description')->nullable();
             $table->timestamps();
         });

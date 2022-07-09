@@ -9,6 +9,7 @@ $factory->define(Stage::class, function (Faker $faker) {
     $name = $faker->word();
     return [
         'id' => strtoupper($name),
-        'name' => $name
+        'name' => $name,
+        'order' => $faker->randomDigitNot(0)
     ];
 });
