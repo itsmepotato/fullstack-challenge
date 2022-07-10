@@ -7,6 +7,11 @@ export default {
 		commit("SET_TOKEN", response.data.token);
 		return dispatch("getUser");
 	},
+    async register({ dispatch, commit }, credentials) {
+		let response = await axios.post('/api/register', credentials)
+		commit("SET_TOKEN", response.data.token);
+		return dispatch("getUser");
+	},
 	async getUser({ commit }) {
 		try{
 			let response = await http.get('/user')

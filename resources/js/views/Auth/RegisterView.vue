@@ -2,28 +2,40 @@
     <div class="flex justify-center mx-4 my-7">
 		<div class="flex flex-col w-full max-w-lg">
 			<div class="flex items-center px-4 border h-14 bg-[#F8F8F8]">
-				Login
+				Registrase
 			</div>
 			<div class="flex flex-col justify-between w-full px-4 py-5 h-full border">
-				<form @submit.prevent="login">
-					<div class="flex flex-col justify-between my-1">
-						<label for="email">
-							Email
+				<form @submit.prevent="register">
+
+                    <div class="flex flex-col justify-between my-1">
+						<label for="name" >
+							Nombre
 						</label>
-						<input type="email" name="email" v-model="loginForm.email" class="w-full h-9 mt-2 p-4 border border-gray-300">
+						<input type="text" name="name" v-model="registerForm.name" class="w-full h-9 mt-2 p-4 border border-gray-300">
 						<div>
 							<span class="text-red-500 text-xs italic">
-								{{ errors && errors.email ? errors.email[0] : '' }}
-								{{ errors && errors.userNotFound ? errors.userNotFound : '' }}
+								{{ errors && errors.name ? errors.name[0] : '' }}
 							</span>
 						</div>
 					</div>
 
 					<div class="flex flex-col justify-between my-1">
-						<label for="password">
+						<label for="email" >
+							Email
+						</label>
+						<input type="email" name="email" v-model="registerForm.email" class="w-full h-9 mt-2 p-4 border border-gray-300">
+						<div>
+							<span class="text-red-500 text-xs italic">
+								{{ errors && errors.email ? errors.email[0] : '' }}
+							</span>
+						</div>
+					</div>
+
+					<div class="flex flex-col justify-between my-1">
+						<label for="password" >
 							Contraseña
 						</label>
-						<input type="password" v-model="loginForm.password" class="w-full h-9 mt-2 p-4 border border-gray-300">
+						<input type="password" v-model="registerForm.password" class="w-full h-9 mt-2 p-4 border border-gray-300">
 						<div>
 							<span class="text-red-500 text-xs italic">
 								{{ errors && errors.password ? errors.password[0] : '' }}
@@ -31,9 +43,21 @@
 						</div>
 					</div>
 
+                    <div class="flex flex-col justify-between my-1">
+						<label for="password_confirmation" >
+							Confirmar Contraseña
+						</label>
+						<input type="password" v-model="registerForm.password_confirmation" class="w-full h-9 mt-2 p-4 border border-gray-300">
+						<div>
+							<span class="text-red-500 text-xs italic">
+								{{ errors && errors.password_confirmation ? errors.password_confirmation[0] : '' }}
+							</span>
+						</div>
+					</div>
+
 					<div class="flex justify-start items-center">
 						<button v-if="!isLoading" type="submit" class="bg-blue-400 hover:bg-blue-600 text-white py-2 px-4 rounded-md my-1">
-							Login
+							Registrarse
 						</button>
 
 						<button v-else disable class="bg-blue-700 text-white py-2 px-4 rounded-md my-1 cursor-not-allowed">
@@ -43,13 +67,13 @@
 							</svg>
 							Cargando...
 						</button>
-
                         <div class="mx-4">
-                            No tienes una cuenta?
-                            <router-link class=" text-blue-700 hover:underline " :to="{ name: 'register' }">
-                                Click para registrase
+                            Ya tienes una cuenta?
+                            <router-link class=" text-blue-700 hover:underline " :to="{ name: 'login' }">
+                                Click para ir al login
                             </router-link>
                         </div>
+
 
 					</div>
 				</form>
@@ -59,8 +83,9 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2';
 export default {
-name: "login-view",
+name: "register-view",
   	props: {
 
 	},
@@ -74,9 +99,11 @@ name: "login-view",
 		return {
             isLoading: false,
 			errors: null,
-            loginForm: {
+            registerForm: {
+                name: null,
                 email: null,
-                password: null
+                password: null,
+                password_confirmation: null
             }
 		};
 	},
@@ -86,21 +113,34 @@ name: "login-view",
 	},
 
 	methods: {
-        async login() {
+        async register() {
             this.isLoading = true
             this.errors = null;
 
-			await this.$store.dispatch('login', this.loginForm)
+			await this.$store.dispatch('register', this.registerForm)
             .catch(err => {
 				this.isLoading = false;
-				this.loginForm.password = '';
+                this.clearPasswordFields();
 				this.errors = err.response.data.errors;
 			});
 
 			if(this.errors === null) {
+                let userName = this.$store.getters.user.name;
+                await Swal.fire({
+                    icon: 'success',
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    allowOutsideClick: false,
+                    title: `Registro correcto, bienvenido/a ${userName}!`,
+                    text: "Sesion iniciada",
+                })
 				this.$router.push({ name: 'dashboard' });
 			}
 
+        },
+        clearPasswordFields() {
+            this.registerForm.password = null;
+            this.registerForm.password_confirmation = null;
         }
 	},
 }

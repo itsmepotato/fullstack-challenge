@@ -25,12 +25,17 @@
            <div class="flex flex-col">
               <template v-if="isAuthenticated">
                 <span class="text-sm text-white ">Hola, {{ userAuth.name }}</span>
-                <button @click="logout" class="text-white text-xs hover:text-[#2DA8E0]">Cerrar sesión</button>
+                <button @click="logout" class="text-white text-xs hover:text-gray-200">Cerrar sesión</button>
               </template>
               <template v-else>
-                <router-link class="text-white text-base hover:text-[#2DA8E0]" :to="{ name: 'login' }">
-                  Login
-                </router-link>
+                <div class="flex justify-between">
+                    <router-link class="text-white text-base hover:text-gray-200 mr-3" :to="{ name: 'login' }">
+                        Login
+                    </router-link>
+                    <router-link class="text-white text-base hover:text-gray-200 ml-3" :to="{ name: 'register' }">
+                        Registrarse
+                    </router-link>
+                </div>
               </template>
            </div>
         </div>

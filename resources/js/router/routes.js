@@ -1,5 +1,6 @@
 import Dashboard from '../views/Dashboard/Dashboard.vue'
 import Login from '../views/Auth/LoginView.vue'
+import Register from '../views/Auth/RegisterView.vue'
 import NotFound from '../views/NotFound.vue'
 
 export default [
@@ -11,6 +12,12 @@ export default [
         path: '/login',
         name: 'login',
         component: Login,
+        meta: { requiresAuth: false }
+    },
+    {
+        path: '/register',
+        name: 'register',
+        component: Register,
         meta: { requiresAuth: false }
     },
     {
