@@ -1,11 +1,26 @@
 <template>
   <div id="app">
-    <nav class="bg-white border-gray-200 px-2 sm:px-4 py-2.5 rounded" style="background: #00102c">
+    <nav class="bg-white border-gray-200 px-2 sm:px-4 py-4 rounded" style="background: #00102c">
       <div class="container flex flex-wrap items-center justify-between mx-auto">
         <router-link class="flex items-center" :to="{ name: 'dashboard' }">
-          <!-- <img class="w-16 md:w-32 lg:w-40" src="http://mambo.mrs.com.py/images/mbt_logo_barra.png"/> -->
           <h3 class="text-white text-3xl">Kanban board</h3>
         </router-link>
+
+        <div v-if="isAuthenticated" class="bottom-0 inline-flex items-center justify-around w-full md:flex md:w-auto md:order-1">
+            <ul class="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
+                <li>
+                    <!-- <router-link class="block py-2 pl-3 pr-4 mr-4 text-white border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-gray-300 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700" to="/dasboard"> -->
+                    <router-link class="block py-2 pl-3 pr-4 text-gray-500 border-b border-gray-100 hover:bg-gray-50" active-class="bg-gray-100" to="/dashboard">
+                        Dashboard
+                    </router-link>
+                </li>
+                <li>
+                    <router-link class="block py-2 pl-3 pr-4 text-gray-500 border-b border-gray-100 hover:bg-gray-50" active-class="bg-gray-100" to="/random">404 Ejemplo</router-link>
+                </li>
+            </ul>
+      </div>
+
+
         <div class="flex items-center md:order-2">
            <div class="flex flex-col">
               <template v-if="isAuthenticated">
@@ -20,24 +35,7 @@
            </div>
         </div>
       </div>
-      <div v-if="isAuthenticated" class="bottom-0 inline-flex items-center justify-around w-full md:flex md:w-auto md:order-1" style="background: #0b2146">
-        <!-- <ul class="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
-          <li>
-            <router-link class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700" to="/visualizaciones">Visualizaciones</router-link>
-          </li>
-          <li>
-            <router-link class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700" to="/historial_acciones">Historial Acciones</router-link>
-          </li>
-          <li>
-            <router-link class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700" to="/acompanamientos">Acompañamientos</router-link>
-          </li>
-          <li v-if="roleIsSuperuser">
-            <router-link class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700" to="/admin">Admin</router-link>
-          </li>
 
-        </ul> -->
-        <p class="text-white">estas authenticado</p>
-      </div>
     </nav>
 
     <!-- <suspense fallback="Loading..."> -->
