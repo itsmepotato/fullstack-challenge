@@ -72,6 +72,10 @@ export default {
                         // alert(`La card ${element.id} se movio a la columna ${column.name}`);
                         // dispatch update card, with arguments (element, column.id) == (card, stage_id)
                         // console.log(column.id);
+
+                        element.stage_id = column.id;
+                        this.$store.dispatch('updateCard', element);
+
                         if(column.id === "DONE") {
                             Swal.fire({
                                 icon: 'success',
