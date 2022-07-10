@@ -11,9 +11,14 @@ export default {
         await http.post('/cards', cardForm);
         await dispatch("getCardsByStages");
 	},
-	async updateCard({ dispatch }, cardForm) {
+	async updateCard({ dispatch }, {cardForm, oldStageId}) {
+        if(oldStageId !== cardForm.stage_id && cardForm.stage_id === 'DONE') {
+            cardForm.delivered_at = new Date().toISOString().split('T')[0];
+        } else{
+            cardForm.delivered_at = null;
+        }
+
         await http.put('/cards/' + cardForm.id, cardForm);
         await dispatch("getCardsByStages");
 	},
-    // get specific card
 };

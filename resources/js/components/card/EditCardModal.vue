@@ -125,7 +125,8 @@
                 this.isLoading = true
                 this.errors = null;
 
-                await this.$store.dispatch('updateCard', this.cardForm)
+                let oldStageId = this.card.stage_id;
+                await this.$store.dispatch('updateCard', {cardForm: this.cardForm, oldStageId})
                 .then(() => {
                     this.isLoading = false;
 

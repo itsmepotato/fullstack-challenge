@@ -78,11 +78,9 @@ export default {
 
                     if(include) {
                         // alert(`La card ${element.id} se movio a la columna ${column.name}`);
-                        // dispatch update card, with arguments (element, column.id) == (card, stage_id)
-                        // console.log(column.id);
-
+                        let oldStageId = element.stage_id;
                         element.stage_id = column.id;
-                        this.$store.dispatch('updateCard', element);
+                        this.$store.dispatch('updateCard', {cardForm: element, oldStageId});
 
                         if(column.id === "DONE") {
                             Swal.fire({
@@ -100,7 +98,7 @@ export default {
         },
         async processedStoreEvent(wasStoredInDoneColumn = false) {
             this.createModalOpen = false;
-            // usamos async await para que se muestren los dos mensajes (uno despues que otro)
+            // usamos async await para que se muestren los dos mensajes (uno despues otro)
             await Swal.fire({
                 icon: 'success',
                 allowEscapeKey: false,

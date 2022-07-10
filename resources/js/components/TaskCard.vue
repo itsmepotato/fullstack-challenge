@@ -15,6 +15,9 @@
     <div class="flex mt-4 justify-between items-center">
       <span class="text-sm text-gray-600">{{task.delivery_date}}</span>
     </div>
+    <h1 class="text-red-400" v-if="isOverdue">overdue</h1>
+    <h1 class="text-green-400" v-if="isCompletedInTime">In time</h1>
+    <h1 class="text-red-400" v-if="isCompletedLate">Complete late</h1>
   </div>
 </template>
 <script>
@@ -28,6 +31,15 @@ export default {
     }
   },
   computed: {
+    isOverdue() {
+        return this.task.delivered_at === null & this.task.delivery_date < new Date().toISOString().split('T')[0];
+    },
+    isCompletedInTime() {
+        return this.task.delivered_at !== null && this.task.delivered_at <= this.task.delivery_date;
+    },
+    isCompletedLate() {
+        return this.task.delivered_at !== null && this.task.delivered_at > this.task.delivery_date;
+    }
   },
   methods: {
     editarTarea() {
