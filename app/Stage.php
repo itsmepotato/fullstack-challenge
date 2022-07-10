@@ -23,7 +23,8 @@ class Stage extends Model
 
     public function cardsOfCurrentUser()
     {
-        // return $this->hasMany(Card::class);
-        return $this->cards()->where('user_id', auth()->id());
+        return $this->cards()
+                ->where('user_id', auth()->id())
+                ->orderBy('updated_at', 'desc');
     }
 }
