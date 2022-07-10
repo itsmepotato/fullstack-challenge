@@ -17,7 +17,7 @@ export default {
 	},
 	async logout({ dispatch, commit }) {
 		commit("SET_TOKEN", null);
-		commit("SET_USER_MASKED", null);
+        localStorage.clear();
 		await dispatch("getUser");
 	}
 };

@@ -29,7 +29,7 @@
       </div>
 
     </div>
-    <CreateCardModal :isVisible="createModalOpen" @cancel="createModalOpen = false" @confirm="createModalOpen = false"></CreateCardModal>
+    <CreateCardModal :isVisible="createModalOpen" :stageId="choosenColumnId" @closeModal="createModalOpen = false" @processed="processedEvent"></CreateCardModal>
   </div>
 </template>
 
@@ -49,6 +49,7 @@ export default {
   data: function () {
     return {
         createModalOpen: false,
+        choosenColumnId: null,
         columns: [
         {
             id: "BUFFER",
@@ -143,6 +144,7 @@ export default {
   methods: {
     nuevaTareaModal(column) {
         console.log(column.id);
+        this.choosenColumnId = column.id;
         this.createModalOpen = !this.createModalOpen;
     },
     editarTareaModal(task) {
@@ -174,6 +176,16 @@ export default {
             }
         }
     },
+    processedEvent() {
+        this.createModalOpen = false;
+        Swal.fire({
+            icon: 'success',
+            allowEscapeKey: false,
+            allowEnterKey: false,
+            allowOutsideClick: false,
+            title: "Card creada correctamente!",
+        })
+    }
   }
 };
 </script>

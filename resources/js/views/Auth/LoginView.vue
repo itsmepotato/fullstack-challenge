@@ -44,9 +44,6 @@
 							Cargando...
 						</button>
 
-						<!-- <router-link class="mx-4 text-[#3490DC] hover:underline " :to="{ name: 'ResetPassword' }">
-							Olvidó su contrasena?
-						</router-link> -->
 					</div>
 				</form>
 			</div>
@@ -61,10 +58,6 @@ name: "login-view",
 
 	},
   	components: {
-    	// AppLayout,
-		// MyTable,
-    	// Form,
-		// Table: Tailwind2.Table,
   	},
 
 	mounted: function() {

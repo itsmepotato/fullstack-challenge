@@ -1,21 +1,20 @@
 <template>
-    <div v-if="true">
+    <div v-if="isVisible">
         <div class="fixed inset-0 z-50 flex justify-center items-center">
             <div class="flex flex-col max-w-5xl rounded-lg shadow-lg bg-white">
                 <!-- header-->
                 <div class="p-5">
                     <div class="flex justify-between items-start">
                         <h3 class="text-2xl font-semibold">Agregar tarjeta</h3>
-                        <button class="p-1 leading-none" @click="emitCancel">
+                        <button class="p-1 leading-none" @click="emitCloseModal" :disabled="isLoading">
                             <div class="text-xl font-semibold h-6 w-6"><span>x</span></div>
                         </button>
                     </div>
                 </div>
                 <!-- body-->
                 <div class="p-6">
-                    <!-- <p>This is a modal body content. Let's make this line a bit longer to see the width.</p> -->
-                    <!-- <div v-if="errors" class="mb-2"> -->
-                    <div class="mb-2">
+                    <div v-if="errors" class="mb-2">
+                    <!-- <div class="mb-2"> -->
 						<span class="text-red-500 text-xl italic">
 							Hay algunos errores!
 						</span>
@@ -26,11 +25,11 @@
                             Nombre
                             </label>
 
-                            <input  v-model="cardForm.name" class="w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 mb-3" type="text" placeholder="Nombre"/>
+                            <input  v-model="cardForm.name" :disabled="isLoading" class="w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 mb-3" type="text" placeholder="Nombre"/>
 
                             <div>
                                 <span class="text-red-500 text-xs italic">
-                                  <!-- {{ errors && errors.nombre ? errors.nombre[0] : '' }} -->
+                                  {{ errors && errors.name ? errors.name[0] : '' }}
                                 </span>
                             </div>
                         </div>
@@ -42,11 +41,11 @@
                                 Fecha de entrega
                             </label>
 
-                            <input  v-model="cardForm.delivery_date" class="w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 mb-3" type="date" placeholder="Fecha de entrega"/>
+                            <input  v-model="cardForm.delivery_date" :disabled="isLoading" class="w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 mb-3" type="date" placeholder="Fecha de entrega"/>
 
                             <div>
                                 <span class="text-red-500 text-xs italic">
-                                  <!-- {{ errors && errors.db_name ? errors.db_name[0] : '' }} -->
+                                  {{ errors && errors.delivery_date ? errors.delivery_date[0] : '' }}
                                 </span>
                             </div>
                         </div>
@@ -54,8 +53,9 @@
                 </div>
                 <!-- footer-->
                 <div class="pb-6 pr-6 flex justify-end items-center">
-                    <button class="btn-outline bg-red-500 hover:bg-red-600 text-white p-2" @click="emitCancel">Cancel</button>
-                    <button class="btn ml-2 bg-blue-500 hover:bg-blue-600 text-white p-2" @click="emitConfirm">Agregar</button>
+                    <button class="btn-outline bg-red-500 hover:bg-red-600 text-white p-2" :disabled="isLoading" @click="emitCloseModal">Cancel</button>
+                    <!-- <button class="btn ml-2 bg-blue-500 hover:bg-blue-600 text-white p-2" @click="emitConfirm">Agregar</button> -->
+                    <button class="btn ml-2 bg-blue-500 hover:bg-blue-600 text-white p-2" :disabled="isLoading" @click="storeCard">Agregar</button>
                 </div>
             </div>
         </div>
@@ -69,27 +69,48 @@
         props: {
             isVisible: {
                 required: true
-            }
+            },
+            stageId: {
+                required: true
+            },
         },
         data: function () {
             return {
+                isLoading: true,
+                errors: null,
                 cardForm: {
                     name: '',
-                    delivery_date: ''
+                    delivery_date: '',
+                    stage_id: null,
                 },
-                errors: {
-                    name: [],
-                    delivery_date: []
-                }
             }
         },
         methods: {
-            emitCancel() {
-                this.$emit('cancel');
+            async storeCard() {
+                this.isLoading = true
+                this.errors = null;
+                this.cardForm.stage_id = this.stageId;
+
+                await this.$store.dispatch('storeCard', this.cardForm)
+                .catch(err => {
+                    this.isLoading = false;
+                    this.errors = err.response.data.errors;
+                });
+                this.isLoading = false;
+
+                this.clearCardForm();
+                this.$emit('processed');
             },
-            emitConfirm() {
-                this.$emit('confirm');
-            }
+            emitCloseModal() {
+                this.$emit('closeModal');
+            },
+            clearCardForm() {
+                this.cardForm = {
+                    name: '',
+                    delivery_date: '',
+                    stage_id: null,
+                };
+            },
         }
     };
 </script>
