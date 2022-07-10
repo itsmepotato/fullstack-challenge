@@ -76,7 +76,7 @@
         },
         data: function () {
             return {
-                isLoading: true,
+                isLoading: false,
                 errors: null,
                 cardForm: {
                     name: '',

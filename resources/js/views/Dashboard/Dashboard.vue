@@ -143,7 +143,6 @@ export default {
   },
   methods: {
     nuevaTareaModal(column) {
-        console.log(column.id);
         this.choosenColumnId = column.id;
         this.createModalOpen = !this.createModalOpen;
     },
