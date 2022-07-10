@@ -17,7 +17,7 @@ export default {
 	},
 	async logout({ dispatch, commit }) {
 		commit("SET_TOKEN", null);
-        localStorage.clear();
+        commit("SET_CARDS_BY_STAGES", []);
 		await dispatch("getUser");
 	}
 };
