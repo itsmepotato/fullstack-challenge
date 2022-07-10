@@ -8,6 +8,9 @@ export default {
 	},
 	async storeCard({ dispatch }, cardForm) {
         // console.log(cardForm);
+        if(cardForm.stage_id === "DONE") {
+            cardForm.delivered_at = new Date().toISOString().split('T')[0];
+        }
         await http.post('/cards', cardForm);
         await dispatch("getCardsByStages");
 	},

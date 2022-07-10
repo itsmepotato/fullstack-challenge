@@ -13,10 +13,8 @@
                 + Nueva tarea
             </button>
           </div>
-          <!-- Draggable component comes from vuedraggable. It provides drag & drop functionality -->
           <draggable :list="column.cards_of_current_user" :animation="200" ghost-class="ghost-card" group="cards_of_current_user"
            @change="onChange">
-            <!-- Each element from here will be draggable and animated. Note :key is very important here to be unique both for draggable and animations to be smooth & consistent. -->
             <task-card
               v-for="(task) in column.cards_of_current_user"
               :key="task.id"

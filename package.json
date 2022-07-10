@@ -27,6 +27,7 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "dayjs": "^1.11.3",
         "sweetalert2": "^11.4.20",
         "vue-router": "^3.4.5",
         "vuedraggable": "^2.24.3",
