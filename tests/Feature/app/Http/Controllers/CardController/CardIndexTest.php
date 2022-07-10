@@ -34,6 +34,27 @@ class CardIndexTest extends TestCase
                 ->assertJsonCount($cardsCount);
     }
 
+    public function test_it_shows_cards_grouped_by_stages()
+    {
+        $this->withoutExceptionHandling();
+        $anotherUser = factory(User::class)->create();
+        factory(Card::class,10)->create([
+            'user_id' => $anotherUser->id,
+            'stage_id' => Stage::BUFFER
+        ]);
+
+        factory(Card::class,2)->create([
+            'stage_id' => Stage::BUFFER
+        ]);
+
+        $response = $this->getJson('/api/get-cards-by-stage');
+        $response->assertStatus(Response::HTTP_OK)
+                ->assertJsonCount(3);
+
+        $cantidadCards = collect(json_decode($response->getContent()))->where('id', Stage::BUFFER)->first()->cards_of_current_user;
+        $this->assertEquals(2, count($cantidadCards));
+    }
+
     public function test_only_show_cards_of_user_logged_in()
     {
         $this->withoutExceptionHandling();

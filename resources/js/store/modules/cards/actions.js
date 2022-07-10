@@ -4,7 +4,8 @@ import http from "../../../http-common";
 export default {
 	async getStagesWithCards({ commit }) {
 		let response = await axios.get('/api/cards')
-		commit("SET_STAGES_WITH_CARDS", response.data.token);
+        console.log(response.data);
+		commit("SET_STAGES_WITH_CARDS", response.data);
 	},
 	async storeCard({ dispatch }, cardForm) {
         // console.log(cardForm);

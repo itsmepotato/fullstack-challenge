@@ -185,7 +185,10 @@ export default {
             title: "Card creada correctamente!",
         })
     }
-  }
+  },
+  created() {
+        this.columns = this.$store.dispatch('getStagesWithCards');
+    }
 };
 </script>
 

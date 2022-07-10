@@ -22,6 +22,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::middleware(['auth:api'])->group(function () {
+    Route::get('/get-cards-by-stage', 'CardController@getCardsByStage');
     Route::apiResource('cards', 'CardController');
     Route::get('/stages', 'StageController@index');
 });

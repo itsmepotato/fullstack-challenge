@@ -8,7 +8,9 @@ use App\Http\Requests\Card\UpdateRequest;
 use App\Services\Card\CreateCard;
 use App\Services\Card\DeleteCard;
 use App\Services\Card\ListCards;
+use App\Services\Card\ListCardsByStages;
 use App\Services\Card\UpdateCard;
+use App\Stage;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -75,5 +77,12 @@ class CardController extends Controller
     {
         $deleteCard->execute($card);
         return response()->json([], 204);
+    }
+
+    public function getCardsByStage(ListCardsByStages $listCardsByStages)
+    {
+        $cardsByStages = $listCardsByStages->execute(auth()->user());
+
+        return response()->json($cardsByStages);
     }
 }
