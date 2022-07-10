@@ -47,7 +47,7 @@ class CardIndexTest extends TestCase
             'stage_id' => Stage::BUFFER
         ]);
 
-        $response = $this->getJson('/api/get-cards-by-stage');
+        $response = $this->getJson('/api/get-cards-by-stages');
         $response->assertStatus(Response::HTTP_OK)
                 ->assertJsonCount(3);
 

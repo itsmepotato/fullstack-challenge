@@ -1,5 +1,5 @@
 export default {
-	SET_STAGES_WITH_CARDS(state, stagesWithCards) {
-		state.stagesWithCards = stagesWithCards;
+	SET_CARDS_BY_STAGES(state, cardsByStages) {
+		state.cardsByStages = cardsByStages;
 	},
 };

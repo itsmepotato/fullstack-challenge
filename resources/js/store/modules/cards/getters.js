@@ -1,3 +1,3 @@
 export default {
-	stagesWithCards: state => state.stagesWithCards,
+	cardsByStages: state => state.cardsByStages,
 };

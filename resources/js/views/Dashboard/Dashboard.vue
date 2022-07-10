@@ -3,22 +3,22 @@
     <div class="flex justify-center">
       <div class="min-h-screen flex overflow-x-scroll py-12">
         <div
-          v-for="column in columns"
+          v-for="column in cardsByStages"
           :key="column.title"
           class="bg-gray-100 rounded-lg px-3 py-3 column-width rounded mr-4"
         >
           <div class="text-gray-700 font-semibold font-sans tracking-wide text-sm flex justify-between">
-            {{column.name}} ({{column.cards.length}})
+            {{column.name}} ({{column.cards_of_current_user.length}})
             <button @click="nuevaTareaModal(column)">
                 + Nueva tarea
             </button>
           </div>
           <!-- Draggable component comes from vuedraggable. It provides drag & drop functionality -->
-          <draggable :list="column.cards" :animation="200" ghost-class="ghost-card" group="cards"
+          <draggable :list="column.cards_of_current_user" :animation="200" ghost-class="ghost-card" group="cards_of_current_user"
            @change="onChange">
             <!-- Each element from here will be draggable and animated. Note :key is very important here to be unique both for draggable and animations to be smooth & consistent. -->
             <task-card
-              v-for="(task) in column.cards"
+              v-for="(task) in column.cards_of_current_user"
               :key="task.id"
               :task="task"
               class="mt-3 cursor-move"
@@ -38,171 +38,82 @@ import draggable from "vuedraggable";
 import TaskCard from "../../components/TaskCard.vue";
 import Swal from 'sweetalert2';
 import CreateCardModal from "../../components/card/CreateCardModal.vue";
+import {mapGetters} from 'vuex';
 
 export default {
-  name: "App",
-  components: {
-    TaskCard,
-    draggable,
-    CreateCardModal
-  },
-  data: function () {
-    return {
-        createModalOpen: false,
-        choosenColumnId: null,
-        columns: [
-        {
-            id: "BUFFER",
-            name: "Buffer",
-            order: 1,
-            cards: [
-                {
-                    id: 1,
-                    name: "Add discount code to checkout page",
-                    user_id: "1",
-                    stage_id: "BUFFER",
-                    delivery_date: "2022-07-15",
-                    delivered_at: null,
-                },
-                {
-                    id: 2,
-                    name: "Add discount",
-                    user_id: "1",
-                    stage_id: "BUFFER",
-                    delivery_date: "2022-07-15",
-                    delivered_at: null,
-                },
-                {
-                    id: 3,
-                    name: "Checkout page",
-                    user_id: "1",
-                    stage_id: "BUFFER",
-                    delivery_date: "2022-07-15",
-                    delivered_at: null,
-                },
-                {
-                    id: 4,
-                    name: "Checkout page",
-                    user_id: "1",
-                    stage_id: "BUFFER",
-                    delivery_date: "2022-07-15",
-                    delivered_at: null,
-                },
-
-
-            ]
-        },
-        {
-            id: "WORKING",
-            name: "Working",
-            order: 2,
-            cards: [
-                {
-                    id: 5,
-                    name: "Add discount code to checkout page",
-                    user_id: "1",
-                    stage_id: "WORKING",
-                    delivery_date: "2022-07-10",
-                    delivered_at: null,
-                },
-                {
-                    id: 6,
-                    name: "Add discount",
-                    user_id: "1",
-                    stage_id: "WORKING",
-                    delivery_date: "2022-07-11",
-                    delivered_at: null,
-                },
-            ]
-        },
-        {
-            id: "DONE",
-            name: "Done",
-            order: 3,
-            cards: [
-                {
-                    id: 7,
-                    name: "Checkout page",
-                    user_id: "1",
-                    stage_id: "DONE",
-                    delivery_date: "2022-07-09",
-                    delivered_at: null,
-                },
-                {
-                    id: 8,
-                    name: "Page",
-                    user_id: "1",
-                    stage_id: "DONE",
-                    delivery_date: "2022-07-13",
-                    delivered_at: null,
-                },
-            ]
-        },
-      ]
-    };
-  },
-  methods: {
-    nuevaTareaModal(column) {
-        this.choosenColumnId = column.id;
-        this.createModalOpen = !this.createModalOpen;
+    name: "App",
+    components: {
+        TaskCard,
+        draggable,
+        CreateCardModal
     },
-    editarTareaModal(task) {
-        console.log('queres editar esta tarea?', task);
+    data: function () {
+        return {
+            createModalOpen: false,
+            choosenColumnId: null,
+        };
     },
-    onChange(event) {
-        let element = event.added && event.added.element ? event.added.element : null;
+    methods: {
+        nuevaTareaModal(column) {
+            this.choosenColumnId = column.id;
+            this.createModalOpen = !this.createModalOpen;
+        },
+        editarTareaModal(task) {
+            console.log('queres editar esta tarea?', task);
+        },
+        onChange(event) {
+            let element = event.added && event.added.element ? event.added.element : null;
 
-        if (element) {
-            for (let column of this.columns) {
-                let include = column.cards.includes(element);
+            if (element) {
+                for (let column of this.cardsByStages) {
+                    let include = column.cards_of_current_user.includes(element);
 
-                if(include) {
-                    // alert(`La card ${element.id} se movio a la columna ${column.name}`);
-                    // dispatch update card, with arguments (element, column.id) == (card, stage_id)
-                    if(column.id === "DONE") {
-                        Swal.fire({
-                            icon: 'success',
-                            allowEscapeKey: false,
-                            allowEnterKey: false,
-                            allowOutsideClick: false,
-                            title: "Felicitaciones por lograrlo!",
-                        })
+                    if(include) {
+                        // alert(`La card ${element.id} se movio a la columna ${column.name}`);
+                        // dispatch update card, with arguments (element, column.id) == (card, stage_id)
+                        // console.log(column.id);
+                        if(column.id === "DONE") {
+                            Swal.fire({
+                                icon: 'success',
+                                allowEscapeKey: false,
+                                allowEnterKey: false,
+                                allowOutsideClick: false,
+                                title: "Felicitaciones por lograrlo!",
+                            })
+                        }
+                        break;
                     }
-                    break;
                 }
-
-                // console.log(column.title);
             }
+        },
+        processedEvent() {
+            this.createModalOpen = false;
+            Swal.fire({
+                icon: 'success',
+                allowEscapeKey: false,
+                allowEnterKey: false,
+                allowOutsideClick: false,
+                title: "Card creada correctamente!",
+            })
         }
     },
-    processedEvent() {
-        this.createModalOpen = false;
-        Swal.fire({
-            icon: 'success',
-            allowEscapeKey: false,
-            allowEnterKey: false,
-            allowOutsideClick: false,
-            title: "Card creada correctamente!",
-        })
-    }
-  },
-  created() {
-        this.columns = this.$store.dispatch('getStagesWithCards');
+    computed: {
+        ...mapGetters(['cardsByStages']),
+    },
+    created() {
+        this.$store.dispatch('getCardsByStages');
     }
 };
 </script>
 
 <style scoped>
 .column-width {
-  min-width: 320px;
-  width: 320px;
+    min-width: 320px;
+    width: 320px;
 }
-/* Unfortunately @apply cannot be setup in codesandbox,
-but you'd use "@apply border opacity-50 border-blue-500 bg-gray-200" here */
+
 .ghost-card {
-  opacity: 0.5;
-  background: #F7FAFC;
-  border: 1px solid #4299e1;
+    @apply border opacity-50 border-blue-500 bg-gray-200
 }
 </style>
 
