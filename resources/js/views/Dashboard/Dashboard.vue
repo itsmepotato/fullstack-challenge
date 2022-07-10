@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <div class="flex justify-center">
       <div class="min-h-screen flex overflow-x-scroll py-12">
         <div
@@ -9,7 +9,7 @@
         >
           <div class="text-gray-700 font-semibold font-sans tracking-wide text-sm flex justify-between">
             {{column.name}} ({{column.cards.length}})
-            <button @click="nuevaTareaModal()">
+            <button @click="nuevaTareaModal(column)">
                 + Nueva tarea
             </button>
           </div>
@@ -27,7 +27,9 @@
           </draggable>
         </div>
       </div>
+
     </div>
+    <CreateCardModal :isVisible="createModalOpen" @cancel="createModalOpen = false" @confirm="createModalOpen = false"></CreateCardModal>
   </div>
 </template>
 
@@ -35,16 +37,19 @@
 import draggable from "vuedraggable";
 import TaskCard from "../../components/TaskCard.vue";
 import Swal from 'sweetalert2';
+import CreateCardModal from "../../components/card/CreateCardModal.vue";
 
 export default {
   name: "App",
   components: {
     TaskCard,
-    draggable
+    draggable,
+    CreateCardModal
   },
   data: function () {
     return {
-      columns: [
+        createModalOpen: false,
+        columns: [
         {
             id: "BUFFER",
             name: "Buffer",
@@ -136,14 +141,9 @@ export default {
     };
   },
   methods: {
-    nuevaTareaModal() {
-        Swal.fire({
-            icon: 'success',
-            allowEscapeKey: false,
-            allowEnterKey: false,
-            allowOutsideClick: false,
-            title: "Felicitaciones por lograrlo!",
-        })
+    nuevaTareaModal(column) {
+        console.log(column.id);
+        this.createModalOpen = !this.createModalOpen;
     },
     editarTareaModal(task) {
         console.log('queres editar esta tarea?', task);
