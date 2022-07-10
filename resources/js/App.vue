@@ -3,7 +3,8 @@
     <nav class="bg-white border-gray-200 px-2 sm:px-4 py-2.5 rounded" style="background: #00102c">
       <div class="container flex flex-wrap items-center justify-between mx-auto">
         <router-link class="flex items-center" :to="{ name: 'dashboard' }">
-          <img class="w-16 md:w-32 lg:w-40" src="http://mambo.mrs.com.py/images/mbt_logo_barra.png"/>
+          <!-- <img class="w-16 md:w-32 lg:w-40" src="http://mambo.mrs.com.py/images/mbt_logo_barra.png"/> -->
+          <h3 class="text-white text-3xl">Kanban board</h3>
         </router-link>
         <div class="flex items-center md:order-2">
            <div class="flex flex-col">

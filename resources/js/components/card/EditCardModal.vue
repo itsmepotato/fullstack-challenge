@@ -5,7 +5,7 @@
                 <!-- header-->
                 <div class="p-5">
                     <div class="flex justify-between items-start">
-                        <h3 class="text-2xl font-semibold">Agregar tarjeta</h3>
+                        <h3 class="text-2xl font-semibold">Editar tarjeta</h3>
                         <button class="p-1 leading-none" @click="emitCloseModal" :disabled="isLoading">
                             <div class="text-xl font-semibold h-6 w-6"><span>x</span></div>
                         </button>
@@ -21,7 +21,7 @@
 					</div>
                     <div class="-mx-3 md:flex mb-6">
                         <div class="md:w-full px-3 mb-6 md:mb-0">
-                            <label class="uppercase tracking-wide text-black text-xs font-bold mb-2" for="company">
+                            <label class="uppercase tracking-wide text-black text-xs font-bold mb-2">
                             Nombre
                             </label>
 
@@ -37,11 +37,30 @@
 
                     <div class="-mx-3 md:flex mb-6">
 						<div class="md:w-full px-3">
-                            <label class="uppercase tracking-wide text-black text-xs font-bold mb-2" for="company">
+                            <label class="uppercase tracking-wide text-black text-xs font-bold mb-2">
                                 Fecha de entrega
                             </label>
 
                             <input  v-model="cardForm.delivery_date" :disabled="isLoading" class="w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 mb-3" type="date" placeholder="Fecha de entrega"/>
+
+                            <div>
+                                <span class="text-red-500 text-xs italic">
+                                  {{ errors && errors.delivery_date ? errors.delivery_date[0] : '' }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="-mx-3 md:flex mb-6">
+						<div class="md:w-full px-3">
+                            <label class="uppercase tracking-wide text-black text-xs font-bold mb-2">
+                                Columna
+                            </label>
+
+                            <select v-model="cardForm.stage_id" class="w-full px-4 py-3 mb-3 text-black bg-gray-200 border border-gray-200 rounded">
+                                <option disabled value="">Favor elegir una columna</option>
+                                <option v-for="stage in stages" :value="stage.id" :key="stage.id">{{stage.name}}</option>
+                            </select>
 
                             <div>
                                 <span class="text-red-500 text-xs italic">
@@ -55,7 +74,7 @@
                 <div class="pb-6 pr-6 flex justify-end items-center">
                     <button class="btn-outline bg-red-500 hover:bg-red-600 text-white p-2" :disabled="isLoading" @click="emitCloseModal">Cancel</button>
                     <!-- <button class="btn ml-2 bg-blue-500 hover:bg-blue-600 text-white p-2" @click="emitConfirm">Agregar</button> -->
-                    <button class="btn ml-2 bg-blue-500 hover:bg-blue-600 text-white p-2" :disabled="isLoading" @click="storeCard">Agregar</button>
+                    <button class="btn ml-2 bg-blue-500 hover:bg-blue-600 text-white p-2" :disabled="isLoading" @click="updateCard">Actualizar</button>
                 </div>
             </div>
         </div>
@@ -64,13 +83,14 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex';
     export default {
-        name: 'CreateCardModal',
+        name: 'EditCardModal',
         props: {
             isVisible: {
                 required: true
             },
-            stageId: {
+            card: {
                 required: true
             },
         },
@@ -79,26 +99,33 @@
                 isLoading: false,
                 errors: null,
                 cardForm: {
+                    id: '',
                     name: '',
                     delivery_date: '',
                     stage_id: null,
                 },
             }
         },
+        computed: {
+            ...mapGetters(['stages']),
+        },
         watch: {
+            card: function (cardData) {
+                this.fillCardForm();
+            },
             isVisible: function (isVisible) {
                 if (isVisible) {
-                    this.clearVariables();
+                    this.errors = null;
+                    this.fillCardForm();
                 }
             },
         },
         methods: {
-            async storeCard() {
+            async updateCard() {
                 this.isLoading = true
                 this.errors = null;
-                this.cardForm.stage_id = this.stageId;
 
-                await this.$store.dispatch('storeCard', this.cardForm)
+                await this.$store.dispatch('updateCard', this.cardForm)
                 .then(() => {
                     this.isLoading = false;
 
@@ -113,20 +140,21 @@
                 .catch(err => {
                     this.isLoading = false;
                     this.errors = err.response.data.errors;
+                    return;
                 });
             },
             emitCloseModal() {
                 this.$emit('closeModal');
             },
-            clearVariables() {
-                this.errors = null;
+            fillCardForm() {
                 this.cardForm = {
-                    name: '',
-                    delivery_date: '',
-                    stage_id: null,
+                    id: this.card.id,
+                    name: this.card.name,
+                    delivery_date: this.card.delivery_date,
+                    stage_id: this.card.stage_id,
                 };
-            },
-        }
+            }
+        },
     };
 </script>
 

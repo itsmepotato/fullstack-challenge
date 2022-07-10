@@ -18,6 +18,7 @@ export default {
 	async logout({ dispatch, commit }) {
 		commit("SET_TOKEN", null);
         commit("SET_CARDS_BY_STAGES", []);
+        commit("SET_STAGES", []);
 		await dispatch("getUser");
 	}
 };

@@ -22,6 +22,7 @@
               :key="task.id"
               :task="task"
               class="mt-3 cursor-move"
+              @editarTareaModal="editarTareaModal"
             ></task-card>
             <!-- </transition-group> -->
           </draggable>
@@ -29,7 +30,8 @@
       </div>
 
     </div>
-    <CreateCardModal :isVisible="createModalOpen" :stageId="choosenColumnId" @closeModal="createModalOpen = false" @processed="processedEvent"></CreateCardModal>
+    <CreateCardModal :isVisible="createModalOpen" :stageId="choosenColumnId" @closeModal="createModalOpen = false" @processed="processedStoreEvent"></CreateCardModal>
+    <EditCardModal :isVisible="editModalOpen" :card="choosenTask" @closeModal="editModalOpen = false" @processed="processedUpdateEvent"></EditCardModal>
   </div>
 </template>
 
@@ -38,6 +40,7 @@ import draggable from "vuedraggable";
 import TaskCard from "../../components/TaskCard.vue";
 import Swal from 'sweetalert2';
 import CreateCardModal from "../../components/card/CreateCardModal.vue";
+import EditCardModal from "../../components/card/EditCardModal.vue";
 import {mapGetters} from 'vuex';
 
 export default {
@@ -45,12 +48,15 @@ export default {
     components: {
         TaskCard,
         draggable,
-        CreateCardModal
+        CreateCardModal,
+        EditCardModal
     },
     data: function () {
         return {
             createModalOpen: false,
+            editModalOpen: false,
             choosenColumnId: null,
+            choosenTask: null,
         };
     },
     methods: {
@@ -59,7 +65,9 @@ export default {
             this.createModalOpen = !this.createModalOpen;
         },
         editarTareaModal(task) {
-            console.log('queres editar esta tarea?', task);
+            // console.log('queres editar esta tarea?', task);
+            this.choosenTask = task;
+            this.editModalOpen = !this.editModalOpen;
         },
         onChange(event) {
             let element = event.added && event.added.element ? event.added.element : null;
@@ -90,15 +98,42 @@ export default {
                 }
             }
         },
-        processedEvent() {
+        async processedStoreEvent(wasStoredInDoneColumn = false) {
             this.createModalOpen = false;
+            // usamos async await para que se muestren los dos mensajes (uno despues que otro)
+            await Swal.fire({
+                icon: 'success',
+                allowEscapeKey: false,
+                allowEnterKey: false,
+                allowOutsideClick: false,
+                title: "Tarjeta creada correctamente!",
+            })
+            if(wasStoredInDoneColumn) {
+                this.showCongratulations();
+            }
+        },
+        async processedUpdateEvent(wasStoredInDoneColumn = false) {
+            this.editModalOpen = false;
+            await Swal.fire({
+                icon: 'success',
+                allowEscapeKey: false,
+                allowEnterKey: false,
+                allowOutsideClick: false,
+                title: "Tarjeta Actualizada correctamente!",
+            });
+
+            if(wasStoredInDoneColumn) {
+                this.showCongratulations();
+            }
+        },
+        showCongratulations() {
             Swal.fire({
                 icon: 'success',
                 allowEscapeKey: false,
                 allowEnterKey: false,
                 allowOutsideClick: false,
-                title: "Card creada correctamente!",
-            })
+                title: "Felicitaciones por lograrlo!",
+            });
         }
     },
     computed: {
@@ -106,6 +141,7 @@ export default {
     },
     created() {
         this.$store.dispatch('getCardsByStages');
+        this.$store.dispatch('getStages');
     }
 };
 </script>

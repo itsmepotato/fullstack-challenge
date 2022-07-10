@@ -3,13 +3,13 @@
     <div class="flex justify-between">
       <p class="text-gray-700 font-semibold font-sans tracking-wide text-sm">{{task.name}}</p>
 
-    <!-- <button @click="editarTarea"> -->
+    <button @click="editarTarea">
         <img
             class="w-6 h-6 rounded-full ml-3"
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Edit_icon_%28the_Noun_Project_30184%29.svg/1024px-Edit_icon_%28the_Noun_Project_30184%29.svg.png"
             alt="Editar"
         >
-    <!-- </button> -->
+    </button>
 
     </div>
     <div class="flex mt-4 justify-between items-center">
@@ -28,6 +28,12 @@ export default {
     }
   },
   computed: {
+  },
+  methods: {
+    editarTarea() {
+        // alert('llamar al modal para editar la tarea');
+        this.$emit('editarTareaModal', this.task);
+    },
   }
 };
 </script>
