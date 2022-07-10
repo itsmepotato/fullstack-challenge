@@ -12,13 +12,13 @@ export default [
         path: '/login',
         name: 'login',
         component: Login,
-        meta: { requiresAuth: false }
+        meta: { requiresBeUnauthenticated: true }
     },
     {
         path: '/register',
         name: 'register',
         component: Register,
-        meta: { requiresAuth: false }
+        meta: { requiresBeUnauthenticated: true }
     },
     {
         path: "/dashboard",
