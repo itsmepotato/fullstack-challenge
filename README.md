@@ -47,3 +47,44 @@ Referencia del diseño
 6. Cómo utilizas las injecciones en nuxt?
 7. Qué hooks de nuxts implementaríamos en esta solución si quisieramos enviar una notificación al terminar de compilar?
 8. Nombrame 3 escenarios donde podríamos usar middlewares para esta solución? 
+
+# Pasos para la instalación 
+
+** Linux y Mac
+1. composer install
+2. npm install
+3. npm run dev
+4. touch database/database.sqlite
+5. cp .env.example .env
+6. php artisan key:generate
+7. php artisan migrate
+8. php artisan db:seed
+9. php artisan passport:install
+10. php artisan serve
+
+** Windows
+1. composer install
+2. npm install
+3. npm run dev
+4. ni database/database.sqlite
+5. cp .env.example .env
+6. php artisan key:generate
+7. php artisan migrate
+8. php artisan db:seed
+9. php artisan passport:install
+10. php artisan serve
+
+# Pasos para correr los tests
+
+** Linux y Mac
+1. touch database/database_testing.sqlite
+2. cp .env..testing.example .env.testing
+3. ./vendor/bin/phpunit
+
+** Windows
+1. ni database/database_testing.sqlite
+2. cp .env..testing.example .env.testing
+3. ./vendor/bin/phpunit
+   
+## En caso de tener el siguiente error: “RuntimeException: No application encryption key has been specified.”
+- Se debe generar la key de la app o copiar la misma que se encuentra en el archivo .env
