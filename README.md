@@ -74,6 +74,13 @@ Referencia del diseño
 9. php artisan passport:install
 10. php artisan serve
 
+## Credenciales (este user es el que tiene las cards creadas desde el seeder)
+
+-email: kanban@test.com
+-password: kanban123
+
+# De igual forma tambien se pueden registrar con un email y password personalizado
+
 # Pasos para correr los tests
 
 ** Linux y Mac
