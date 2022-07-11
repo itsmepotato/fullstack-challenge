@@ -78,12 +78,12 @@ Referencia del diseño
 
 ** Linux y Mac
 1. touch database/database_testing.sqlite (importante que el archivo se llame de esta forma ya que asi se definio en config/database.php)
-2. cp .env..testing.example .env.testing
+2. cp .env.testing.example .env.testing
 3. ./vendor/bin/phpunit
 
 ** Windows
 1. ni database/database_testing.sqlite
-2. cp .env..testing.example .env.testing
+2. cp .env.testing.example .env.testing
 3. ./vendor/bin/phpunit
    
 ## En caso de tener el siguiente error: “RuntimeException: No application encryption key has been specified.”
