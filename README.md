@@ -77,7 +77,7 @@ Referencia del diseño
 # Pasos para correr los tests
 
 ** Linux y Mac
-1. touch database/database_testing.sqlite
+1. touch database/database_testing.sqlite (importante que el archivo se llame de esta forma ya que asi se definio en config/database.php)
 2. cp .env..testing.example .env.testing
 3. ./vendor/bin/phpunit
 
